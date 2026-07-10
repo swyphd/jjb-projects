@@ -1,4 +1,22 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+﻿import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { createClient } from '@supabase/supabase-js';
+
+const _sb = createClient(
+  'https://ektzupeqzwhhseubvdpn.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrdHp1cGVxendoaHNldWJ2ZHBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MDA1ODgsImV4cCI6MjA5OTI3NjU4OH0.mfeD0Z9Ho--g8asyaK5M6NeQRcRXAzqlqaB5xfHImmU'
+);
+
+const storage = {
+  async get(key) {
+    try {
+      const { data } = await _sb.from('kv_store').select('value').eq('key', key).single();
+      return data ? { value: data.value } : null;
+    } catch { return null; }
+  },
+  async set(key, value) {
+    await _sb.from('kv_store').upsert({ key, value, updated_at: new Date().toISOString() });
+  }
+};
 
 /* ============================================================
    JJB MANAGEMENT — PROPOSAL PORTAL
@@ -214,14 +232,14 @@ export default function ProposalPortal() {
   useEffect(() => {
     (async () => {
       try {
-        const s = await window.storage.get("jjb-proposal-settings-v1", true);
+        const s = await storage.get("jjb-proposal-settings-v1", true);
         if (s?.value) {
           const parsed = JSON.parse(s.value);
           if (parsed.hours) setHoursDefaults({ ...DEFAULT_HOURS, ...parsed.hours });
         }
       } catch (e) {/* no settings yet */}
       try {
-        const lib = await window.storage.get("jjb-proposals-v1", true);
+        const lib = await storage.get("jjb-proposals-v1", true);
         if (lib?.value) setLibrary(JSON.parse(lib.value));
       } catch (e) {/* no library yet */}
       setLoaded(true);
@@ -231,14 +249,14 @@ export default function ProposalPortal() {
   const persistLibrary = useCallback(async (next) => {
     setLibrary(next);
     try {
-      await window.storage.set("jjb-proposals-v1", JSON.stringify(next), true);
+      await storage.set("jjb-proposals-v1", JSON.stringify(next), true);
     } catch (e) { setStorageOk(false); }
   }, []);
 
   const persistSettings = useCallback(async (nextHours) => {
     setHoursDefaults(nextHours);
     try {
-      await window.storage.set("jjb-proposal-settings-v1", JSON.stringify({ hours: nextHours }), true);
+      await storage.set("jjb-proposal-settings-v1", JSON.stringify({ hours: nextHours }), true);
     } catch (e) { setStorageOk(false); }
   }, []);
 
@@ -315,7 +333,7 @@ Write two pieces in JJB's voice — direct, plain-language, confident, no buzzwo
 Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "..."} — no markdown fences, no preamble.`;
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1017,3 +1035,4 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
   .doc-page:last-child{page-break-after:auto}
 }
 `;
+
