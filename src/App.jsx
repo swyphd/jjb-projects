@@ -326,6 +326,7 @@ export default function ProposalPortal() {
   const [printMode, setPrintMode] = useState(false);
   const [showInternal, setShowInternal] = useState(true);
   const [engagementStates, setEngagementStates] = useState({}); // proposalId -> { startDate, completedTasks: Set }
+  const [partnerDefaults, setPartnerDefaults] = useState({}); // taskId -> partnerName
 
   /* ---------- storage ---------- */
 
@@ -342,6 +343,10 @@ export default function ProposalPortal() {
         const lib = await storage.get("jjb-proposals-v1", true);
         if (lib?.value) setLibrary(JSON.parse(lib.value));
       } catch (e) {/* no library yet */}
+      try {
+        const pd = await storage.get("jjb-partner-settings-v1");
+        if (pd?.value) setPartnerDefaults(JSON.parse(pd.value));
+      } catch {}
       setLoaded(true);
     })().catch(() => { setStorageOk(false); setLoaded(true); });
   }, []);
@@ -350,6 +355,13 @@ export default function ProposalPortal() {
     setLibrary(next);
     try {
       await storage.set("jjb-proposals-v1", JSON.stringify(next), true);
+    } catch (e) { setStorageOk(false); }
+  }, []);
+
+  const persistPartners = useCallback(async (next) => {
+    setPartnerDefaults(next);
+    try {
+      await storage.set("jjb-partner-settings-v1", JSON.stringify(next));
     } catch (e) { setStorageOk(false); }
   }, []);
 
@@ -744,6 +756,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
               engagementStates={engagementStates}
               setEngagementStates={setEngagementStates}
               storage={storage}
+              partnerDefaults={partnerDefaults}
             />
           )}
 
@@ -764,6 +777,55 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                   </label>
                 ))}
                 <p className="hint">Rule of thumb check: at these defaults, the full five-service slate is {Object.values(hoursDefaults).reduce((a, b) => a + Number(b || 0), 0)} hours against {money(SERVICES.reduce((a, s) => a + s.basePrice, 0))} in starting fees.</p>
+              </section>
+
+              <section className="card" style={{marginTop:14}}>
+                <div className="card-eyebrow">Partner assignments by task</div>
+                <p className="hint">Set the default owner for each task in each engagement type. Changes apply to all future engagements — existing completion state is unaffected.</p>
+                {Object.entries(PLAYBOOKS).map(([svcId, tasks]) => {
+                  const svc = SERVICES.find(s => s.id === svcId);
+                  if (!svc) return null;
+                  return (
+                    <div key={svcId} style={{marginBottom:18}}>
+                      <div className="card-eyebrow" style={{color:"var(--petrol)",marginBottom:8}}>{svc.name}</div>
+                      {tasks.map(task => {
+                        const current = partnerDefaults[task.id] || task.partner;
+                        return (
+                          <div key={task.id} className="fld inline" style={{alignItems:"flex-start",gap:10,marginBottom:10}}>
+                            <span style={{flex:1}}>
+                              <strong style={{fontSize:13}}>{task.name}</strong>
+                              <em style={{display:"block",fontStyle:"normal",fontSize:11,color:"var(--slate)",marginTop:2}}>Phase {task.phase} · {task.hours}h</em>
+                            </span>
+                            <div className="seg" style={{flexWrap:"nowrap"}}>
+                              {PARTNERS.map(p => (
+                                <button
+                                  key={p}
+                                  className={"seg-btn" + (current === p ? " on" : "")}
+                                  style={{fontSize:11,padding:"5px 9px"}}
+                                  onClick={() => persistPartners({ ...partnerDefaults, [task.id]: p })}
+                                >
+                                  {p.split(" ")[0]}
+                                </button>
+                              ))}
+                              {partnerDefaults[task.id] && (
+                                <button
+                                  className="seg-btn"
+                                  style={{fontSize:10,padding:"5px 7px",color:"var(--slate)"}}
+                                  onClick={() => {
+                                    const next = { ...partnerDefaults };
+                                    delete next[task.id];
+                                    persistPartners(next);
+                                  }}
+                                  title="Reset to default"
+                                >✕</button>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
               </section>
             </div>
           )}
@@ -932,7 +994,7 @@ function ProposalDocument({ proposal, services, priceOf, totalPrice, preview }) 
    ACTIVE ENGAGEMENTS TAB
    ============================================================ */
 
-function ActiveEngagements({ proposals, engagementStates, setEngagementStates, storage }) {
+function ActiveEngagements({ proposals, engagementStates, setEngagementStates, storage, partnerDefaults = {} }) {
   const [selected, setSelected] = React.useState(null);
   const [completedMap, setCompletedMap] = React.useState({}); // proposalId -> Set of task ids
 
@@ -1036,7 +1098,7 @@ function ActiveEngagements({ proposals, engagementStates, setEngagementStates, s
                           <div className="eng-task-top">
                             <span className="eng-task-name">{task.name}</span>
                             <span className="eng-task-meta">
-                              <span className="eng-partner">{task.partner.split(" ")[0]}</span>
+                              <span className="eng-partner">{(partnerDefaults[task.id] || task.partner).split(" ")[0]}</span>
                               <span className="eng-hours">{task.hours}h</span>
                               {dueDate && <span className="eng-due">Due {fmtDate(dueDate)}</span>}
                             </span>
@@ -1334,5 +1396,6 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
   .doc-page:last-child{page-break-after:auto}
 }
 `;
+
 
 
