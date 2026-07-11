@@ -525,7 +525,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
               {[
                 ["compose", "New proposal"],
                 ["library", `Library${library.length ? " · " + library.length : ""}`],
-                ["settings", "Hour settings"],
+                ["settings", "Settings"],
                 ["engagements", `Active${library.filter(p => p.status === "Won").length ? " · " + library.filter(p => p.status === "Won").length : ""}`],
               ].map(([id, label]) => (
                 <button key={id} className={"tab" + (tab === id ? " on" : "")} onClick={() => setTab(id)}>
