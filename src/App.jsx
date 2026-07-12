@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { createClient } from '@supabase/supabase-js';
 
 const _sb = createClient(
@@ -362,8 +362,10 @@ export default function ProposalPortal() {
     setPartnerDefaults(next);
     try {
       await storage.set("jjb-partner-settings-v1", JSON.stringify(next));
+      setSaveFlash("Assignment saved");
+      setTimeout(() => setSaveFlash(""), 2000);
     } catch (e) { setStorageOk(false); }
-  }, []);
+  }, [setSaveFlash]);
 
   const persistSettings = useCallback(async (nextHours) => {
     setHoursDefaults(nextHours);
@@ -807,18 +809,6 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                                   {p.split(" ")[0]}
                                 </button>
                               ))}
-                              {partnerDefaults[task.id] && (
-                                <button
-                                  className="seg-btn"
-                                  style={{fontSize:10,padding:"5px 7px",color:"var(--slate)"}}
-                                  onClick={() => {
-                                    const next = { ...partnerDefaults };
-                                    delete next[task.id];
-                                    persistPartners(next);
-                                  }}
-                                  title="Reset to default"
-                                >✕</button>
-                              )}
                             </div>
                           </div>
                         );
