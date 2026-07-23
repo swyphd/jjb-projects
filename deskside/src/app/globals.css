@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f8fa;
+  --surface: #ffffff;
+  --surface-muted: #f1f3f6;
+  --foreground: #14181f;
+  --muted: #5b6472;
+  --border: #e2e5ea;
+  --brand: #0d6e6e;
+  --brand-strong: #0a5757;
+  --brand-soft: #e3f2f1;
+  --accent: #2f6fed;
+
+  --verdict-compatible-bg: #e6f6ec;
+  --verdict-compatible-fg: #0f7a3d;
+  --verdict-not-bg: #fbe9e9;
+  --verdict-not-fg: #b3261e;
+  --verdict-depends-bg: #fdf1de;
+  --verdict-depends-fg: #93600a;
+  --verdict-info-bg: #eaedf2;
+  --verdict-info-fg: #4b5563;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0e1116;
+    --surface: #161b22;
+    --surface-muted: #1c222b;
+    --foreground: #edf0f4;
+    --muted: #96a0ad;
+    --border: #2a313c;
+    --brand: #2bb3a3;
+    --brand-strong: #4fd0c0;
+    --brand-soft: #0f2c29;
+    --accent: #6ea2ff;
+
+    --verdict-compatible-bg: #103821;
+    --verdict-compatible-fg: #4ade80;
+    --verdict-not-bg: #3a1616;
+    --verdict-not-fg: #f87171;
+    --verdict-depends-bg: #3a2a0d;
+    --verdict-depends-fg: #fbbf24;
+    --verdict-info-bg: #232a33;
+    --verdict-info-fg: #cbd3dc;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.badge-compatible {
+  background: var(--verdict-compatible-bg);
+  color: var(--verdict-compatible-fg);
+}
+.badge-not_compatible {
+  background: var(--verdict-not-bg);
+  color: var(--verdict-not-fg);
+}
+.badge-depends {
+  background: var(--verdict-depends-bg);
+  color: var(--verdict-depends-fg);
+}
+.badge-need_more_info {
+  background: var(--verdict-info-bg);
+  color: var(--verdict-info-fg);
+}
+
+.confidence-high {
+  color: var(--verdict-compatible-fg);
+}
+.confidence-medium {
+  color: var(--verdict-depends-fg);
+}
+.confidence-low {
+  color: var(--verdict-not-fg);
+}
+
+::selection {
+  background: var(--brand-soft);
+}
