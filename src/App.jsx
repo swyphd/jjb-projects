@@ -19,9 +19,10 @@ const storage = {
 };
 
 /* ============================================================
-   JJB MANAGEMENT — PROPOSAL PORTAL
+   VARDA GROUP — PROPOSAL PORTAL
    Compose → Generate → PDF. Shared library + internal hours.
    Storage keys (shared): jjb-proposals-v1, jjb-proposal-settings-v1
+   (keys keep the legacy jjb- prefix so existing saved proposals carry over)
    ============================================================ */
 
 /* ---------- business day helpers ---------- */
@@ -50,13 +51,13 @@ const PLAYBOOKS = {
     { id:"p2", phase:"I", name:"Document review", desc:"Review existing HR, IT, and legal policies for AI-relevant language; note gaps. Look specifically for BYOD, data handling, vendor approval, and acceptable use policies.", partner:"Jeff Swift", hours:3, due:7 },
     { id:"p3", phase:"I", name:"Leadership interviews", desc:"30–45 min interviews with 2–3 senior leaders. Goal: understand risk appetite, current AI use awareness, and any prior incidents. Document verbatim quotes for the policy preamble.", partner:"Jeff Swift", hours:3, due:10 },
     { id:"p4", phase:"I", name:"Staff/functional interviews", desc:"30-min interviews with 3–4 staff from key functions (IT, HR, operations). Goal: surface what AI tools are actually in use. Document without judgment.", partner:"Jeff Swift", hours:3, due:12 },
-    { id:"p5", phase:"I", name:"Legal/compliance scoping", desc:"Review any vendor contracts, data processing agreements, or regulatory obligations relevant to AI use. Flag anything that constrains the policy language.", partner:"Bert van Uitert", hours:2, due:12 },
+    { id:"p5", phase:"I", name:"Legal/compliance scoping", desc:"Review any vendor contracts, data processing agreements, or regulatory obligations relevant to AI use. Flag anything that constrains the policy language.", partner:"Jeff Swift", hours:2, due:12 },
     { id:"p6", phase:"I", name:"Current-state summary memo", desc:"Write a 1–2 page internal memo summarizing findings from interviews and document review. This becomes the drafting brief — don't skip it.", partner:"Jeff Swift", hours:2, due:14 },
     // Phase II
     { id:"p7", phase:"II", name:"Policy framework outline", desc:"Draft the structure and headings of the policy document. Share with client for input before drafting full language. Include proposed governance model and decision-rights structure.", partner:"Jeff Swift", hours:2, due:17 },
     { id:"p8", phase:"II", name:"Policy drafting", desc:"Write the full policy document. Use plain language throughout — no legal jargon in the main body. Cover: scope, definitions, approved tools, data handling, vendor approval, enforcement, and governance.", partner:"Jeff Swift", hours:5, due:23 },
-    { id:"p9", phase:"II", name:"Legal and compliance review", desc:"Review the full draft for accuracy on data privacy, vendor liability, and regulatory exposure. Redline anything that needs softening or strengthening. Return with tracked changes.", partner:"Bert van Uitert", hours:3, due:25 },
-    { id:"p10", phase:"II", name:"Revisions based on legal review", desc:"Incorporate Bert's redlines. Where you disagree with a suggested change, flag it for discussion — don't just override it. Update the document and send to client for review.", partner:"Jeff Swift", hours:2, due:27 },
+    { id:"p9", phase:"II", name:"Legal and compliance review", desc:"Review the full draft (with outside counsel where exposure warrants it) for accuracy on data privacy, vendor liability, and regulatory exposure. Redline anything that needs softening or strengthening. Return with tracked changes.", partner:"Jeff Swift", hours:3, due:25 },
+    { id:"p10", phase:"II", name:"Revisions based on legal review", desc:"Incorporate the review redlines (and outside counsel's notes, if engaged). Where a suggested change doesn't fit, flag it for discussion — don't just override it. Update the document and send to client for review.", partner:"Jeff Swift", hours:2, due:27 },
     // Phase III
     { id:"p11", phase:"III", name:"Client review + revisions", desc:"Address client feedback on the draft policy. Keep a change log of what was accepted, modified, or declined and why. Don't let scope creep in here — new items go in a future engagement.", partner:"Jeff Swift", hours:1, due:32 },
     { id:"p12", phase:"III", name:"Leadership readout", desc:"60-minute session with senior leadership to walk through the final policy, explain the governance structure, and answer questions. Prepare a 1-page summary slide. Send final policy document same day.", partner:"Jeff Swift", hours:2, due:35 },
@@ -79,34 +80,34 @@ const PLAYBOOKS = {
     // Phase I
     { id:"r1", phase:"I", name:"Kickoff + intake", desc:"Confirm scope, introduce the engagement structure, and collect any existing strategic plans, budgets, or prior AI assessments. Set interview schedule.", partner:"Jeff Swift", hours:2, due:2 },
     { id:"r2", phase:"I", name:"Leadership interviews", desc:"45-min interviews with 3–4 senior leaders. Goal: understand strategic priorities, what they think AI can do for the org, and what they're worried about. Document the tension between ambition and caution.", partner:"Jeff Swift", hours:4, due:8 },
-    { id:"r3", phase:"I", name:"Tech and tool inventory", desc:"Document all software systems in use, with special attention to any AI features embedded in existing tools (CRMs, ERPs, HR platforms, etc.). Map what AI is already running.", partner:"Josh Boyles", hours:4, due:10 },
+    { id:"r3", phase:"I", name:"Tech and tool inventory", desc:"Document all software systems in use, with special attention to any AI features embedded in existing tools (CRMs, ERPs, HR platforms, etc.). Map what AI is already running.", partner:"Jeff Swift", hours:4, due:10 },
     { id:"r4", phase:"I", name:"Capacity and readiness analysis", desc:"Assess the organization's actual capacity to adopt AI: IT bandwidth, staff comfort level, data quality, and governance maturity. Be honest — roadmaps built on optimistic capacity assumptions fail.", partner:"Jeff Swift", hours:3, due:12 },
     { id:"r5", phase:"I", name:"Current-state summary", desc:"Write a 2–3 page internal summary: where they are, what's working, what's missing, and what the baseline capacity supports. This is the foundation for the roadmap — get it right.", partner:"Jeff Swift", hours:3, due:15 },
     // Phase II
     { id:"r6", phase:"II", name:"Initiative identification", desc:"Working from the current-state summary, identify 8–12 potential AI initiatives. For each: a plain-language description, the function it affects, and a rough effort estimate. Don't filter yet.", partner:"Jeff Swift", hours:2, due:18 },
     { id:"r7", phase:"II", name:"Prioritization framework", desc:"Score each initiative on two dimensions: impact (operational value, risk reduction) and feasibility (capacity, data readiness, vendor availability). Use a simple 1–3 scale. Stack-rank the list.", partner:"Jeff Swift", hours:2, due:20 },
-    { id:"r8", phase:"II", name:"Governance checkpoint mapping", desc:"For each high-priority initiative, identify the governance checkpoints required before deployment: legal review, board approval, staff training, vendor evaluation. Map these to the timeline.", partner:"Bert van Uitert", hours:3, due:22 },
+    { id:"r8", phase:"II", name:"Governance checkpoint mapping", desc:"For each high-priority initiative, identify the governance checkpoints required before deployment: legal review, board approval, staff training, vendor evaluation. Map these to the timeline.", partner:"Jeff Swift", hours:3, due:22 },
     { id:"r9", phase:"II", name:"Roadmap drafting", desc:"Build the 12–18 month roadmap: sequenced initiative list, governance checkpoints, 90-day quick wins, and quarterly milestones. Make it a working document, not a static slide.", partner:"Jeff Swift", hours:5, due:28 },
     { id:"r10", phase:"II", name:"Client review + revisions", desc:"Share the draft roadmap with the client point of contact for review. Incorporate substantive feedback. Push back on requests to add initiatives that exceed capacity.", partner:"Jeff Swift", hours:2, due:33 },
     // Phase III
     { id:"r11", phase:"III", name:"Leadership presentation prep", desc:"Build a 10–15 slide deck for the leadership presentation. Lead with the 90-day quick wins and the first governance checkpoint. Make the prioritization logic visible.", partner:"Jeff Swift", hours:3, due:36 },
     { id:"r12", phase:"III", name:"Leadership presentation", desc:"Deliver the roadmap presentation. Facilitate discussion. Capture decisions and any scope adjustments in real time. The goal is an endorsed roadmap, not just a received one.", partner:"Jeff Swift", hours:2, due:38 },
-    { id:"r13", phase:"III", name:"Working-session walkthrough", desc:"A 90-minute working session with the team that will own roadmap execution. Walk through the first 90 days in detail. Answer the 'how do we actually start?' questions.", partner:"Josh Boyles", hours:2, due:40 },
+    { id:"r13", phase:"III", name:"Working-session walkthrough", desc:"A 90-minute working session with the team that will own roadmap execution. Walk through the first 90 days in detail. Answer the 'how do we actually start?' questions.", partner:"Jeff Swift", hours:2, due:40 },
   ],
   discovery: [
     // Phase I
-    { id:"d1", phase:"I", name:"Kickoff + environment scoping", desc:"Map the client's IT environment: cloud vs. on-prem, number of users, key systems, and any existing DLP or monitoring tools. Identify the admin contacts needed for tool deployment.", partner:"Josh Boyles", hours:2, due:2 },
-    { id:"d2", phase:"I", name:"Discovery tool evaluation", desc:"Evaluate 2–3 discovery tool options against the client's environment and constraints. Document licensing, deployment complexity, data residency, and output format. Make a recommendation.", partner:"Josh Boyles", hours:3, due:6 },
-    { id:"d3", phase:"I", name:"Tool deployment + configuration", desc:"Deploy and configure the selected discovery tool. Work with the client's IT admin. Document every configuration decision. Run a test scan on a limited user group before full rollout.", partner:"Josh Boyles", hours:5, due:13 },
+    { id:"d1", phase:"I", name:"Kickoff + environment scoping", desc:"Map the client's IT environment: cloud vs. on-prem, number of users, key systems, and any existing DLP or monitoring tools. Identify the admin contacts needed for tool deployment.", partner:"Jeff Swift", hours:2, due:2 },
+    { id:"d2", phase:"I", name:"Discovery tool evaluation", desc:"Evaluate 2–3 discovery tool options against the client's environment and constraints. Document licensing, deployment complexity, data residency, and output format. Make a recommendation.", partner:"Jeff Swift", hours:3, due:6 },
+    { id:"d3", phase:"I", name:"Tool deployment + configuration", desc:"Deploy and configure the selected discovery tool. Work with the client's IT admin. Document every configuration decision. Run a test scan on a limited user group before full rollout.", partner:"Jeff Swift", hours:5, due:13 },
     // Phase II
-    { id:"d4", phase:"II", name:"Full scan execution", desc:"Run the full organization-wide scan. Monitor for errors. Document any systems or users excluded from the scan and why. Collect raw output.", partner:"Josh Boyles", hours:3, due:17 },
-    { id:"d5", phase:"II", name:"Findings analysis", desc:"Analyze scan output: categorize tools by risk level (data sensitivity, vendor terms, user count), identify shadow-AI patterns, and flag the highest-risk findings. Don't editorialize in the data — facts only at this stage.", partner:"Josh Boyles", hours:4, due:20 },
-    { id:"d6", phase:"II", name:"Legal review of findings", desc:"Review the highest-risk findings for legal exposure: GDPR/CCPA implications, vendor contract violations, data residency issues. Flag anything requiring immediate action before the report is delivered.", partner:"Bert van Uitert", hours:3, due:22 },
+    { id:"d4", phase:"II", name:"Full scan execution", desc:"Run the full organization-wide scan. Monitor for errors. Document any systems or users excluded from the scan and why. Collect raw output.", partner:"Jeff Swift", hours:3, due:17 },
+    { id:"d5", phase:"II", name:"Findings analysis", desc:"Analyze scan output: categorize tools by risk level (data sensitivity, vendor terms, user count), identify shadow-AI patterns, and flag the highest-risk findings. Don't editorialize in the data — facts only at this stage.", partner:"Jeff Swift", hours:4, due:20 },
+    { id:"d6", phase:"II", name:"Legal review of findings", desc:"Review (with outside counsel where warranted) the highest-risk findings for legal exposure: GDPR/CCPA implications, vendor contract violations, data residency issues. Flag anything requiring immediate action before the report is delivered.", partner:"Jeff Swift", hours:3, due:22 },
     { id:"d7", phase:"II", name:"Baseline report drafting", desc:"Write the shadow-AI baseline report: executive summary, full tool inventory, risk-ranked findings, and recommended immediate actions. Lead with what needs to happen in the next 30 days.", partner:"Jeff Swift", hours:4, due:26 },
-    { id:"d8", phase:"II", name:"Client review + revisions", desc:"Share the draft report with the client. Address questions about methodology. Don't soften findings — the point of this engagement is to surface things accurately.", partner:"Josh Boyles", hours:1, due:30 },
+    { id:"d8", phase:"II", name:"Client review + revisions", desc:"Share the draft report with the client. Address questions about methodology. Don't soften findings — the point of this engagement is to surface things accurately.", partner:"Jeff Swift", hours:1, due:30 },
     // Phase III
-    { id:"d9", phase:"III", name:"Handoff documentation", desc:"Write the monitoring handoff doc: what tool is running, how to read the output, who owns it, and what triggers an escalation. Include a quarterly review checklist.", partner:"Josh Boyles", hours:3, due:33 },
-    { id:"d10", phase:"III", name:"Findings briefing", desc:"60-minute briefing with leadership and IT. Present findings, walk through the top 5 risks, and confirm owners for each recommended action. Don't leave the room without owners assigned.", partner:"Josh Boyles", hours:2, due:35 },
+    { id:"d9", phase:"III", name:"Handoff documentation", desc:"Write the monitoring handoff doc: what tool is running, how to read the output, who owns it, and what triggers an escalation. Include a quarterly review checklist.", partner:"Jeff Swift", hours:3, due:33 },
+    { id:"d10", phase:"III", name:"Findings briefing", desc:"60-minute briefing with leadership and IT. Present findings, walk through the top 5 risks, and confirm owners for each recommended action. Don't leave the room without owners assigned.", partner:"Jeff Swift", hours:2, due:35 },
   ],
   training: [
     // Phase I
@@ -115,8 +116,8 @@ const PLAYBOOKS = {
     // Phase II
     { id:"tr3", phase:"II", name:"Curriculum outline", desc:"Draft the full curriculum outline for each track: section titles, learning objectives per section, and the key policy references each section builds on. Share with client for sign-off before building materials.", partner:"Jeff Swift", hours:2, due:8 },
     { id:"tr4", phase:"II", name:"Training materials development", desc:"Build the full training materials: slide decks, scenario handouts, and a facilitator guide for each track. Scenarios should be drawn from the client's real context — no generic examples.", partner:"Jeff Swift", hours:4, due:13 },
-    { id:"tr5", phase:"II", name:"Materials review", desc:"Review training materials for legal accuracy: are the policy references correct? Are the scenarios within bounds of what the policy actually permits? Flag any materials that overstate or understate the policy.", partner:"Bert van Uitert", hours:1, due:15 },
-    { id:"tr6", phase:"II", name:"Revisions", desc:"Incorporate Bert's feedback. Finalize all materials and send to client 5 business days before the first session.", partner:"Jeff Swift", hours:1, due:16 },
+    { id:"tr5", phase:"II", name:"Materials review", desc:"Review training materials for legal accuracy: are the policy references correct? Are the scenarios within bounds of what the policy actually permits? Flag any materials that overstate or understate the policy.", partner:"Jeff Swift", hours:1, due:15 },
+    { id:"tr6", phase:"II", name:"Revisions", desc:"Incorporate review feedback. Finalize all materials and send to client 5 business days before the first session.", partner:"Jeff Swift", hours:1, due:16 },
     // Phase III
     { id:"tr7", phase:"III", name:"Session delivery", desc:"Deliver each training track. Keep sessions to 60–90 minutes. Use the scenarios as discussion anchors, not lectures. Leave 15 minutes for Q&A. Capture questions that reveal policy gaps.", partner:"Jeff Swift", hours:3, due:21 },
     { id:"tr8", phase:"III", name:"Materials handover", desc:"Send the full training package to the client point of contact: slide decks, facilitator guides, scenario handouts, and a brief note on how to update the materials when policies change.", partner:"Jeff Swift", hours:1, due:22 },
@@ -129,7 +130,9 @@ const VERTICALS = [
   { id: "nonprofit", label: "Nonprofit" },
 ];
 
-const PARTNERS = ["Jeff Swift", "Bert van Uitert", "Josh Boyles"];
+const PARTNERS = ["Jeff Swift"];
+const PRINCIPAL = PARTNERS[0];
+const leadOf = (name) => (PARTNERS.includes(name) ? name : PRINCIPAL);
 
 const DEFAULT_HOURS = { policy: 28, tabletop: 18, roadmap: 42, discovery: 35, training: 14 };
 
@@ -141,7 +144,7 @@ const SERVICES = [
     verticals: ["higher-ed", "business", "nonprofit"],
     tagline: "The written policy your organization doesn't have yet.",
     body:
-      "We draft a complete, plain-language AI policy built around your actual systems, culture, and risk profile — not a template pulled off the shelf. The work starts with stakeholder interviews and a review of your existing policies, then moves through drafting, legal and compliance review, and a leadership readout. You end with a policy your leadership can approve and your people can actually follow.",
+      "We draft a complete, plain-language AI policy built around your actual systems, culture, and risk profile — not a template pulled off the shelf. The work starts with stakeholder interviews and a review of your existing policies, then moves through drafting, compliance review, and a leadership readout. You end with a policy your leadership can approve and your people can actually follow.",
     deliverables: [
       "Current-state review of existing policies and AI-relevant governance",
       "Stakeholder interviews across leadership, staff, and key functions",
@@ -257,7 +260,7 @@ const SERVICES = [
 ];
 
 const FIRM_SUMMARY =
-  "JJB Management is an AI and policy consulting firm founded by Jeff Swift (Policy & Compliance; PhD, Director of IT at Southwest Technical College), Bert van Uitert (Technology & Data Counsel; Managing Counsel at Syneos Health), and Josh Boyles (Cybersecurity & AI; VP of Cybersecurity and AI at The Larry H. Miller Company). The firm helps colleges, companies, and nonprofits write the AI policy they don't have yet, build a roadmap for what comes next, and train the people who have to follow it. Every engagement is flat-fee and scoped in advance — no retainers, no platform to buy. Engagements run in three phases: Assess, Draft & Build, Train & Handoff.";
+  "Varda Group is a digital consulting firm led by Jeff Swift (Principal; PhD, Director of IT at Southwest Technical College). The firm helps colleges, companies, and nonprofits write the AI policy they don't have yet, build a roadmap for what comes next, and train the people who have to follow it. Every engagement is flat-fee and scoped in advance — no retainers, no platform to buy. Engagements run in three phases: Assess, Draft & Build, Train & Handoff.";
 
 const PHASES = [
   {
@@ -426,20 +429,20 @@ export default function ProposalPortal() {
     const svcLines = selectedServices
       .map((s) => `- ${serviceName(s, proposal.client.vertical)} (${money(priceOf(s))}): ${s.tagline}`)
       .join("\n");
-    const prompt = `You are writing the opening of a consulting proposal for JJB Management.
+    const prompt = `You are writing the opening of a consulting proposal for Varda Group.
 
 FIRM: ${FIRM_SUMMARY}
 
 CLIENT: ${proposal.client.org || "(unnamed organization)"}
 VERTICAL: ${VERTICALS.find((v) => v.id === proposal.client.vertical)?.label}
 CONTACT: ${proposal.client.contactName} ${proposal.client.contactTitle ? "(" + proposal.client.contactTitle + ")" : ""}
-CONTEXT NOTES FROM THE JJB PARTNER: ${proposal.client.notes || "(none provided)"}
+CONTEXT NOTES FROM VARDA GROUP: ${proposal.client.notes || "(none provided)"}
 
 SELECTED SERVICES:
 ${svcLines || "(none yet)"}
 TOTAL FEE: ${money(totalPrice)}
 
-Write two pieces in JJB's voice — direct, plain-language, confident, no buzzwords, no exclamation points, written as "we" addressing the client as "you" or by organization name:
+Write two pieces in Varda Group's voice — direct, plain-language, confident, no buzzwords, no exclamation points, written as "we" addressing the client as "you" or by organization name:
 
 1. "execSummary": 130–180 words. An executive summary that names the client's specific situation (use the context notes), frames why this engagement and this moment, and states plainly what they get and how the flat-fee model works. Do not list every deliverable — the proposal body does that.
 2. "situationRead": 2–3 sentences under the heading "What we're seeing" — a candid read of the client's current state and risk, grounded in the vertical and the notes.
@@ -511,7 +514,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
   /* ============================ RENDER ============================ */
 
   return (
-    <div className="jjb-root">
+    <div className="varda-root">
       <style>{CSS}</style>
 
       {!printMode && (
@@ -519,8 +522,8 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
           {/* ---------- header ---------- */}
           <header className="topbar">
             <div className="wordmark">
-              <span className="wm-jjb">JJB</span>
-              <span className="wm-rest">Management</span>
+              <span className="wm-mark">Varda</span>
+              <span className="wm-rest">Group</span>
               <span className="wm-sub">Proposal Portal</span>
             </div>
             <nav className="tabs">
@@ -573,7 +576,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                       <input value={proposal.client.contactTitle} onChange={(e) => setClient({ contactTitle: e.target.value })} placeholder="CIO" />
                     </label>
                   </div>
-                  <label className="fld">
+                  {PARTNERS.length > 1 && <label className="fld">
                     <span>Prepared by (relationship owner)</span>
                     <div className="seg">
                       {PARTNERS.map((p) => (
@@ -582,7 +585,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                         </button>
                       ))}
                     </div>
-                  </label>
+                  </label>}
                   <label className="fld">
                     <span>Context notes <em>(feeds the AI summary — what's driving this, current state, who's asking)</em></span>
                     <textarea rows={4} value={proposal.client.notes} onChange={(e) => setClient({ notes: e.target.value })} placeholder="e.g., Provost worried about academic integrity cases; no AI policy on the books; faculty senate meets in October…" />
@@ -686,7 +689,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                       </table>
                       {selectedServices.length > 0 && (
                         <p className="int-note">
-                          At ~10 hrs/week of partner capacity, this is roughly <strong>{Math.max(1, Math.ceil(totalHours / 10))} week{Math.ceil(totalHours / 10) > 1 ? "s" : ""}</strong> of effort for one partner, or <strong>{Math.max(1, Math.ceil(totalHours / 30))}</strong> at full three-partner throughput.
+                          At ~10 hrs/week of capacity, this is roughly <strong>{Math.max(1, Math.ceil(totalHours / 10))} week{Math.ceil(totalHours / 10) > 1 ? "s" : ""}</strong> of effort.
                         </p>
                       )}
                     </>
@@ -717,7 +720,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
               {loaded && library.length === 0 && (
                 <div className="empty-state">
                   <h3>No proposals yet</h3>
-                  <p>Proposals saved here are shared across all three partners — Jeff, Bert, and Josh all see the same library.</p>
+                  <p>Proposals saved here go to the shared Varda Group library and are available from any device.</p>
                   <button className="btn primary" onClick={() => setTab("compose")}>Start the first one</button>
                 </div>
               )}
@@ -729,7 +732,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                     <div className="lib-main">
                       <div className="lib-org">{p.client?.org || "(unnamed)"} <span className="lib-vert">{VERTICALS.find((v) => v.id === p.client?.vertical)?.label}</span></div>
                       <div className="lib-meta">
-                        {svcs.length} service{svcs.length !== 1 ? "s" : ""} · {money(tot)} · {p.client?.preparedBy} · {new Date(p.updatedAt || p.createdAt).toLocaleDateString()}
+                        {svcs.length} service{svcs.length !== 1 ? "s" : ""} · {money(tot)} · {leadOf(p.client?.preparedBy)} · {new Date(p.updatedAt || p.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                     <select className="status-sel" value={p.status || "Draft"} onChange={(e) => setStatus(p.id, e.target.value)}>
@@ -767,7 +770,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
             <div className="settings">
               <section className="card">
                 <div className="card-eyebrow">Default estimated hours per service</div>
-                <p className="hint">These defaults are shared across all three partners and apply to every new proposal. Individual proposals can override them in the scope panel.</p>
+                <p className="hint">These defaults apply to every new proposal. Individual proposals can override them in the scope panel.</p>
                 {SERVICES.map((s) => (
                   <label key={s.id} className="fld inline">
                     <span>{s.name} <em>starting at {money(s.basePrice)}</em></span>
@@ -781,7 +784,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                 <p className="hint">Rule of thumb check: at these defaults, the full five-service slate is {Object.values(hoursDefaults).reduce((a, b) => a + Number(b || 0), 0)} hours against {money(SERVICES.reduce((a, s) => a + s.basePrice, 0))} in starting fees.</p>
               </section>
 
-              <section className="card" style={{marginTop:14}}>
+              {PARTNERS.length > 1 && <section className="card" style={{marginTop:14}}>
                 <div className="card-eyebrow">Partner assignments by task</div>
                 <p className="hint">Set the default owner for each task in each engagement type. Changes apply to all future engagements — existing completion state is unaffected.</p>
                 {Object.entries(PLAYBOOKS).map(([svcId, tasks]) => {
@@ -816,7 +819,7 @@ Respond with ONLY a valid JSON object: {"execSummary": "...", "situationRead": "
                     </div>
                   );
                 })}
-              </section>
+              </section>}
             </div>
           )}
         </>
@@ -855,9 +858,9 @@ function ProposalDocument({ proposal, services, priceOf, totalPrice, preview }) 
       {/* ---- cover ---- */}
       <section className="doc-page cover">
         <div className="cover-band">
-          <div className="cover-wordmark"><b>JJB</b> Management</div>
+          <div className="cover-wordmark"><b>Varda</b> Group</div>
           <div className="cover-line" />
-          <div className="cover-firmline">AI &amp; Policy Consulting</div>
+          <div className="cover-firmline">Digital Consulting</div>
         </div>
         <div className="cover-body">
           <div className="cover-eyebrow">Engagement proposal · {vLabel}</div>
@@ -887,7 +890,7 @@ function ProposalDocument({ proposal, services, priceOf, totalPrice, preview }) 
           </div>
           <div>
             <div className="foot-k">Prepared by</div>
-            <div className="foot-v">{proposal.client.preparedBy}, Founding Partner</div>
+            <div className="foot-v">{leadOf(proposal.client.preparedBy)}, Principal</div>
           </div>
           <div>
             <div className="foot-k">Date</div>
@@ -967,13 +970,13 @@ function ProposalDocument({ proposal, services, priceOf, totalPrice, preview }) 
           </div>
           <div className="sig-block">
             <div className="sig-line" />
-            <div className="sig-k">JJB Management — {proposal.client.preparedBy}, Founding Partner</div>
+            <div className="sig-k">Varda Group — {leadOf(proposal.client.preparedBy)}, Principal</div>
           </div>
         </div>
 
         <div className="doc-partners">
-          <div className="foot-k">The partners on your engagement</div>
-          <p><b>Jeff Swift</b> — Policy &amp; Compliance · <b>Bert van Uitert</b> — Technology &amp; Data Counsel · <b>Josh Boyles</b> — Cybersecurity &amp; AI</p>
+          <div className="foot-k">Who you'll work with</div>
+          <p><b>Jeff Swift</b> — Principal, Varda Group · Policy, compliance &amp; AI strategy</p>
         </div>
       </section>
     </div>
@@ -1088,7 +1091,7 @@ function ActiveEngagements({ proposals, engagementStates, setEngagementStates, s
                           <div className="eng-task-top">
                             <span className="eng-task-name">{task.name}</span>
                             <span className="eng-task-meta">
-                              <span className="eng-partner">{(partnerDefaults[task.id] || task.partner).split(" ")[0]}</span>
+                              <span className="eng-partner">{leadOf(partnerDefaults[task.id] || task.partner).split(" ")[0]}</span>
                               <span className="eng-hours">{task.hours}h</span>
                               {dueDate && <span className="eng-due">Due {fmtDate(dueDate)}</span>}
                             </span>
@@ -1122,7 +1125,7 @@ function ActiveEngagements({ proposals, engagementStates, setEngagementStates, s
           <div key={p.id} className="lib-card" style={{cursor:"pointer"}} onClick={() => setSelected(p.id)}>
             <div className="lib-main">
               <div className="lib-org">{p.client?.org || "(unnamed)"} <span className="lib-vert">{VERTICALS.find(v => v.id === p.client?.vertical)?.label}</span></div>
-              <div className="lib-meta">{svcLabels.join(" · ")} · {p.client?.preparedBy}</div>
+              <div className="lib-meta">{svcLabels.join(" · ")} · {leadOf(p.client?.preparedBy)}</div>
               {!p.startDate && <div className="lib-meta" style={{color:"#B2483C",marginTop:3}}>No start date — set one in Library</div>}
             </div>
             <div className="eng-pct" style={{minWidth:140}}>
@@ -1171,14 +1174,14 @@ const CSS = `
 }
 
 *{box-sizing:border-box}
-.jjb-root{font-family:'Archivo',system-ui,sans-serif;color:var(--ink);background:var(--mist);min-height:100vh}
+.varda-root{font-family:'Archivo',system-ui,sans-serif;color:var(--ink);background:var(--mist);min-height:100vh}
 button{font-family:inherit;cursor:pointer}
 input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
 
 /* ---------- portal chrome ---------- */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;background:var(--petrol-deep);color:#fff;flex-wrap:wrap}
 .wordmark{display:flex;align-items:baseline;gap:8px}
-.wm-jjb{font-family:'Spectral',serif;font-weight:700;font-size:24px;letter-spacing:.5px}
+.wm-mark{font-family:'Spectral',serif;font-weight:700;font-size:24px;letter-spacing:.5px}
 .wm-rest{font-size:15px;opacity:.85}
 .wm-sub{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--brass-soft);margin-left:10px;border-left:1px solid rgba(255,255,255,.25);padding-left:12px}
 .tabs{display:flex;gap:6px}
@@ -1379,7 +1382,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
 
 @media print{
   .no-print{display:none !important}
-  .jjb-root{background:#fff}
+  .varda-root{background:#fff}
   .print-shell{background:#fff;padding:0}
   .doc{width:auto;margin:0}
   .doc-page{box-shadow:none;margin:0;min-height:0;padding:40px 34px;page-break-after:always}
