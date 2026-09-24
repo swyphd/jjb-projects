@@ -124,7 +124,7 @@ const PLAYBOOKS = {
   ],
 };
 
-const VERTICALS = [
+export const VERTICALS = [
   { id: "higher-ed", label: "Higher Education" },
   { id: "business", label: "Business" },
   { id: "nonprofit", label: "Nonprofit" },
@@ -136,7 +136,7 @@ const leadOf = (name) => (PARTNERS.includes(name) ? name : PRINCIPAL);
 
 const DEFAULT_HOURS = { policy: 28, tabletop: 18, roadmap: 42, discovery: 35, training: 14 };
 
-const SERVICES = [
+export const SERVICES = [
   {
     id: "policy",
     name: "AI Policy & Governance",
@@ -262,7 +262,7 @@ const SERVICES = [
 const FIRM_SUMMARY =
   "Varda Group is a digital consulting firm led by Jeff Swift (Principal; PhD, Director of IT at Southwest Technical College). The firm helps colleges, companies, and nonprofits write the AI policy they don't have yet, build a roadmap for what comes next, and train the people who have to follow it. Every engagement is flat-fee and scoped in advance — no retainers, no platform to buy. Engagements run in three phases: Assess, Draft & Build, Train & Handoff.";
 
-const PHASES = [
+export const PHASES = [
   {
     n: "I",
     name: "Assess",
@@ -330,6 +330,8 @@ export default function ProposalPortal() {
   const [showInternal, setShowInternal] = useState(true);
   const [engagementStates, setEngagementStates] = useState({}); // proposalId -> { startDate, completedTasks: Set }
   const [partnerDefaults, setPartnerDefaults] = useState({}); // taskId -> partnerName
+
+  useEffect(() => { document.title = "Varda Group — Proposal Portal"; }, []);
 
   /* ---------- storage ---------- */
 
